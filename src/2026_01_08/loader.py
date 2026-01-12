@@ -2,9 +2,9 @@ import csv
 from numpy import asarray
 
 
-def load_1d_csv_data(file_name):
+def load_1d_csv_data(filename):
     """load 1D CSV data transfrom to NDArray"""
-    with open(file_name) as file:
+    with open(filename) as file:
         reader = csv.reader(file)
         header = next(reader)
 
