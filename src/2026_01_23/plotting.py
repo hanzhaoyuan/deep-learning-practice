@@ -2,12 +2,11 @@ import matplotlib.pyplot as plt
 
 
 def plot_data_2d(x, y_gt):
-    plt.scatter(x[:, 0], x[:, 1], c=y_gt, s=30)
+    plt.scatter(x[:, 0], x[:, 1], c=y_gt, s=20)
     plt.colorbar()
-    plt.axis("equal")
-    plt.xlabel("x0", fontsize=15)
-    plt.ylabel("x1", fontsize=15)
-    plt.tick_params(axis="both", which="major", labelsize=16)
+    plt.xlabel("x1", fontsize=20)
+    plt.ylabel("x2", fontsize=20)
+    plt.tick_params(axis="both", which="major", labelsize=20)
     plt.show()
 
 
