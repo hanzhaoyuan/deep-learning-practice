@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import deeplay as dl
 import deeplay as dl
-from torch.nn import Sigmoid, MSELoss
+from torch.nn import ReLU, MSELoss, Sigmoid
 from seaborn import cubehelix_palette, heatmap
+from torch.nn import Softmax
 
-# plt.ion()
-if not os.path.exists("MINIST_dataset"):
+if not os.path.exists("MNIST_dataset"):
     os.system("git clone git@github.com:DeepTrackAI/MNIST_dataset.git")
 
 train_path = os.path.join("MNIST_dataset", "mnist", "train")
@@ -54,9 +54,11 @@ classifier_template = dl.Classifier(
     model=mlp_template, num_classes=10, make_targets_one_hot=True,
     loss=MSELoss(), optimizer=dl.SGD(lr=.1)
 )
-classifier = classifier_template.create()
+classifier_template[..., "activation#:-1"].configure(ReLU)
+classifier_relu = classifier_template.create()
 
-trainer.fit(classifier, train_dataloader)
+trainer_relu = dl.Trainer(max_epochs=1, accelerator="auto")
+trainer_relu.fit(classifier_relu, train_dataloader)
 
 test_path = os.path.join("MNIST_dataset", "mnist", "test")
 test_images_files = sorted(os.listdir(test_path))
@@ -73,7 +75,7 @@ for file in test_images_files:
 test_images_digits = list(zip(test_images, test_digits))
 test_dataloader = dl.DataLoader(test_images_digits, shuffle=False)
 
-trainer.test(classifier, test_dataloader)
+trainer_relu.test(classifier_relu, test_dataloader)
 
 
 def plot_confusion_matrix(classifier, dataloader):
@@ -91,4 +93,4 @@ def plot_confusion_matrix(classifier, dataloader):
     plt.show()
 
 
-plot_confusion_matrix(classifier, test_dataloader)
+plot_confusion_matrix(classifier_relu, test_dataloader)
